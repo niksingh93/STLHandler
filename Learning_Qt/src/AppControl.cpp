@@ -39,3 +39,13 @@ void AppControl::ReoriCamZ()
 {
     _graphics->ReorientCameraZ();
 }
+
+void AppControl::ToggleEdgeDisplay(bool idisplay)
+{
+    _graphics->DisplayEdges(idisplay);
+}
+
+void AppControl::ToggleNormalDisplay(bool idisplay)
+{
+    _graphics->DisplayNormalsByColor(idisplay);
+}

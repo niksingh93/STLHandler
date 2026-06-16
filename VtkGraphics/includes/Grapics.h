@@ -13,10 +13,13 @@ public:
 	Grapics(vtkRenderWindow* irenderWindow);
 
 	void DisplayMesh(STLMesh* imesh);
+	void DisplayEdges(bool idisplay);
+	void DisplayNormalsByColor(bool idisplay);
 
 	void ReorientCameraX();
 	void ReorientCameraY();
 	void ReorientCameraZ();
+	
 
 private:
 	//vtkRenderWindow* _renderWindow = NULL;
@@ -24,5 +27,8 @@ private:
 	vtkSmartPointer<vtkActor> _actor = NULL;
 	vtkSmartPointer<vtkPolyDataMapper> _mapper = NULL;
 	vtkSmartPointer<vtkOrientationMarkerWidget> _orientationWidget = NULL;
+	vtkSmartPointer<vtkProperty> _backFaceProperty = NULL;
+
+	double _defaultColor[3];
 };
 

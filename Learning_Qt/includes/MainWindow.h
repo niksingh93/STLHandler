@@ -21,6 +21,10 @@ public:
     void OnReoriCamYClicked();
     void OnReoriCamZClicked();
 
+    void OnEdgeDisplayToggled(bool active);
+
+    void OnNormalDisplayToggled(bool active);
+
 private:
     void CreateActions();
 
@@ -39,6 +43,9 @@ private:
     // Action List
     QAction* _openAction = NULL;
     QAction* _saveAction = NULL;
+    QAction* _toggleEdgeDisplay = NULL;
+    QAction* _toggleNormalDisplay = NULL;
+
     
     QAction* _reorientCameraX = NULL;
     QAction* _reorientCameraY = NULL;

@@ -23,6 +23,8 @@ public:
 	void ReoriCamX();
 	void ReoriCamY();
 	void ReoriCamZ();
+	void ToggleEdgeDisplay(bool idisplay);
+	void ToggleNormalDisplay(bool idisplay);
 
 private:
 	STLMesh* _mesh = NULL;

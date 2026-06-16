@@ -84,11 +84,15 @@ void MainWindow::CreateActions()
     // Actions List
     _openAction = new QAction(QIcon("icons/Open.png"), "Open", this);
     _saveAction = new QAction(QIcon("icons/Save.png"), "Save", this);
+    _toggleEdgeDisplay = new QAction(QIcon("icons/icons8-triangle.png"), "Display Edges", this);
+    _toggleEdgeDisplay->setCheckable(true);
+    _toggleNormalDisplay = new QAction(QIcon("icons/Color_triangle.png"), "Display Normal Dir", this);
+    _toggleNormalDisplay->setCheckable(true);
 
     // Camera Actions
-    _reorientCameraX = new QAction("X", this); //QIcon("icons/Open.png"), 
-    _reorientCameraY = new QAction("Y", this); //QIcon("icons/Open.png"), 
-    _reorientCameraZ = new QAction("Z", this); //QIcon("icons/Open.png"), 
+    _reorientCameraX = new QAction(QIcon("icons/X_cam.png"), "X-cam", this);  
+    _reorientCameraY = new QAction(QIcon("icons/Y_cam.png"), "Y-cam", this);  
+    _reorientCameraZ = new QAction(QIcon("icons/Z_cam.png"), "Z-cam", this);  
 
     /*
     QIcon icon("icons/Open.png");
@@ -114,6 +118,12 @@ void MainWindow::DefineActionBehaviour()
 
     connect(_reorientCameraZ, &QAction::triggered,
         this, &MainWindow::OnReoriCamZClicked);
+
+    connect(_toggleEdgeDisplay, &QAction::toggled, 
+        this, &MainWindow::OnEdgeDisplayToggled);
+
+    connect(_toggleNormalDisplay, &QAction::toggled,
+        this, &MainWindow::OnNormalDisplayToggled);
 }
 
 #pragma endregion
@@ -128,6 +138,7 @@ void MainWindow::CreateToolbar()
 
     toolbar->addAction(_openAction);
     toolbar->addAction(_saveAction);
+    
 
     // Creates empty space
     QWidget* spacer = new QWidget();
@@ -136,6 +147,12 @@ void MainWindow::CreateToolbar()
         QSizePolicy::Preferred);
 
     toolbar->addWidget(spacer);
+
+    //Create toggle normal display button
+    toolbar->addAction(_toggleNormalDisplay);
+
+    //Create toggle edge display button
+    toolbar->addAction(_toggleEdgeDisplay);
 
     // Creates camera controls
     QWidget* cameraControl = new QWidget();
@@ -300,6 +317,15 @@ void MainWindow::OnReoriCamZClicked()
     _AppControl->ReoriCamZ();
 }
 
+void MainWindow::OnEdgeDisplayToggled(bool active)
+{
+    _AppControl->ToggleEdgeDisplay(active);
+}
+
+void MainWindow::OnNormalDisplayToggled(bool active)
+{
+    _AppControl->ToggleNormalDisplay(active);
+}
 
 #pragma endregion
 
