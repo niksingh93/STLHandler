@@ -27,8 +27,8 @@ private:
 	vtkSmartPointer<vtkActor> _actor = NULL;
 	vtkSmartPointer<vtkPolyDataMapper> _mapper = NULL;
 	vtkSmartPointer<vtkOrientationMarkerWidget> _orientationWidget = NULL;
-	vtkSmartPointer<vtkProperty> _backFaceProperty = NULL;
 
-	double _defaultColor[3];
+	vtkSmartPointer<vtkProperty> _defaultFaceProperty = NULL;
+	vtkSmartPointer<vtkProperty> _defaultbackFaceProperty = NULL;
 };
 

@@ -22,9 +22,11 @@ Grapics::Grapics(vtkRenderWindow* irenderWindow)
 	_renderer->SetBackground2(1, 1, 1);
 
 	_actor = vtkSmartPointer<vtkActor>::New();
+	_actor->GetProperty()->LightingOff();
+	//_actor->GetProperty()->GetColor(_defaultColor);
 	_renderer->AddActor(_actor);
 	_renderer->ResetCamera();
-
+	
 	_mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
 	_actor->SetMapper(_mapper);
 
@@ -82,7 +84,7 @@ void Grapics::DisplayMesh(STLMesh* imesh)
 		fnormal.normalize();
 		normals->SetNumberOfComponents(3);
 		normals->SetName("Normals");
-		normals->InsertNextTuple3(-fnormal.x(), fnormal.y(), fnormal.z());
+		normals->InsertNextTuple3(fnormal.x(), fnormal.y(), fnormal.z());
 	}
 
 	auto polyData = vtkSmartPointer<vtkPolyData>::New();
@@ -95,7 +97,6 @@ void Grapics::DisplayMesh(STLMesh* imesh)
 
 	_actor->SetMapper(_mapper);
 	_actor->GetProperty()->SetInterpolationToFlat();
-	_actor->GetProperty()->GetColor(_defaultColor);
 
 	//_actor->GetProperty()->EdgeVisibilityOn();
 	_renderer->ResetCamera();
@@ -119,26 +120,35 @@ void Grapics::DisplayEdges(bool idisplay)
 void Grapics::DisplayNormalsByColor(bool idisplay)
 {
 	if (_renderer == NULL || _actor == NULL) return;
-
-	if (_backFaceProperty == NULL)
-	{
-		_backFaceProperty = vtkSmartPointer<vtkProperty>::New();
-		_backFaceProperty->SetColor(1.0, 0.0, 0.0); // Back faces = red
-		//_backFaceProperty->LightingOff();
-	}
 		
 	if (idisplay)
 	{
+		if (!_actor->GetProperty())
+			_actor->SetProperty(vtkSmartPointer<vtkProperty>::New());
+
+		if (!_actor->GetBackfaceProperty())
+			_actor->SetBackfaceProperty(vtkSmartPointer<vtkProperty>::New());
+
+		// Copy of default properties [automatically deletes old defauls]
+		_defaultFaceProperty = vtkSmartPointer<vtkProperty>::New();
+		_defaultFaceProperty->DeepCopy(_actor->GetProperty());
+
+		_defaultbackFaceProperty = vtkSmartPointer<vtkProperty>::New();
+		_defaultbackFaceProperty->DeepCopy(_actor->GetBackfaceProperty());
+
 		// Highlight front face in Green and back face in red
 		_actor->GetProperty()->SetColor(0.0, 1.0, 0.0);
-		//_actor->GetProperty()->LightingOff();
-		_actor->SetBackfaceProperty(_backFaceProperty);
+		_actor->GetBackfaceProperty()->SetColor(1.0, 0.0, 0.0);
 	}
 	else
 	{
-		_actor->GetProperty()->SetColor(_defaultColor);
-		//_actor->GetProperty()->LightingOn();
-		_actor->SetBackfaceProperty(NULL);
+		double defaultColor[3];
+		_defaultFaceProperty->GetColor(defaultColor);
+		_actor->GetProperty()->SetColor(defaultColor);
+
+		double defaultbackColor[3];
+		_defaultbackFaceProperty->GetColor(defaultbackColor);
+		_actor->GetBackfaceProperty()->SetColor(defaultbackColor);
 	}
 
 	_renderer->GetRenderWindow()->Render();
