@@ -8,6 +8,7 @@
 #include <string>
 #include "Definitions.h"
 #include "STLHandlerExports.h"
+#include <STLMesh.h>
 
 
 
