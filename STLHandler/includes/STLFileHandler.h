@@ -3,10 +3,12 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <string>
 #include "Definitions.h"
 #include "STLHandlerExports.h"
+
 
 
 class STLHANDLER_API  STLFileHandler
@@ -47,4 +49,39 @@ public:
         
         return oStlPointData; // scene->mMeshes[0];
 	}
+
+    //static void WriteFile(std::string iFile);
+    static void WriteFile(std::string iFile, STLMesh _mesh)
+    {
+        std::ofstream file(iFile);
+
+        file << "solid mesh\n";
+
+        for (int fid = 0; fid < _mesh.GetNumFaces(); fid++)
+        {
+            auto vertexIds = _mesh.GetFace(fid).GetVertexIds();
+
+            Point p0 = _mesh.GetVertex(vertexIds[0]).GetPoint();
+            Point p1 = _mesh.GetVertex(vertexIds[1]).GetPoint();
+            Point p2 = _mesh.GetVertex(vertexIds[2]).GetPoint();
+
+            Point normal = (p1 - p0).cross(p2 - p0).normalized();
+
+            file << "facet normal "
+                << normal.x() << " "
+                << normal.y() << " "
+                << normal.z() << "\n";
+
+            file << "outer loop\n";
+
+            file << "vertex " << p0.x() << " " << p0.y() << " " << p0.z() << "\n";
+            file << "vertex " << p1.x() << " " << p1.y() << " " << p1.z() << "\n";
+            file << "vertex " << p2.x() << " " << p2.y() << " " << p2.z() << "\n";
+
+            file << "endloop\n";
+            file << "endfacet\n";
+        }
+
+        file << "endsolid mesh\n";
+    }
 };
