@@ -9,6 +9,8 @@ class AppControl
 public:
 	void LoadSTLFile(std::string ifilePath);
 
+	void ExportSTLFile(std::string ifilePath);
+
 	void InitializeGraphics(vtkRenderWindow* irenderWindow);
 
 	double GetMeshVolume();

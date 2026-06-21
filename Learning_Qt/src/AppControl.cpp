@@ -20,6 +20,11 @@ void AppControl::LoadSTLFile(std::string ifilePath)
     _graphics->DisplayMesh(_mesh);
 }
 
+void AppControl::ExportSTLFile(std::string ifilePath)
+{
+    STLFileHandler::WriteFile(ifilePath, _mesh);
+}
+
 void AppControl::InitializeGraphics(vtkRenderWindow* irenderWindow)
 {
     _graphics = new Grapics(irenderWindow);

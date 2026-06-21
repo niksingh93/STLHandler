@@ -297,9 +297,23 @@ void MainWindow::OnOpenClicked()
 
 void MainWindow::OnSaveClicked()
 {
-    QMessageBox::information(this,
+    /*QMessageBox::information(this,
         "Save",
-        "Save menu clicked");
+        "Save menu clicked");*/
+
+    QString filePath =
+        QFileDialog::getSaveFileName(
+            this,
+            "Save STL File",
+            "",
+            "STL Files (*.stl)");
+
+    if (filePath.isEmpty())
+        return;
+
+    std::cout << filePath.toStdString() << std::endl;
+
+    _AppControl->ExportSTLFile(filePath.toStdString());
 }
 
 void MainWindow::OnReoriCamXClicked()

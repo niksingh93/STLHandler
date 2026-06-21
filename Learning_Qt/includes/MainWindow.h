@@ -1,9 +1,12 @@
 #pragma once
-#include <QApplication>
+//#include <QApplication>
 #include <QMainWindow>
-#include <QSurfaceFormat>
+//#include <QSurfaceFormat>
+#include <qaction.h>
 #include <qlabel.h>
-#include <QVTKOpenGLNativeWidget.h>
+#include <qwidget.h>
+#include <qdockwidget.h>
+//#include <QVTKOpenGLNativeWidget.h>
 #include "AppControl.h"
 
 class MainWindow : public QMainWindow
