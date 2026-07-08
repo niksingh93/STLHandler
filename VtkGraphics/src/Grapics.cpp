@@ -232,21 +232,40 @@ void Grapics::ReorientCameraZ()
 	_renderer->GetRenderWindow()->Render();
 }
 
+void Grapics::ResetView()
+{
+	SetFaceDisplayMode(FaceDisplay::Default);
+}
+
 void Grapics::SetFaceDisplayMode(FaceDisplay iDisplayMode)
 {
 	if (iDisplayMode == FaceDisplay::Default)
 	{
 		_mapper->ScalarVisibilityOff();
 
-		_actor->GetProperty()->LightingOn();
-		double defaultColor[3];
-		_defaultFaceProperty->GetColor(defaultColor);
-		_actor->GetProperty()->SetColor(defaultColor);
-
-		_actor->GetBackfaceProperty()->LightingOn();
-		double defaultbackColor[3];
-		_defaultbackFaceProperty->GetColor(defaultbackColor);
-		_actor->GetBackfaceProperty()->SetColor(defaultbackColor);
+		if (_actor->GetProperty())
+		{
+			_actor->GetProperty()->LightingOn();
+			if (_defaultFaceProperty)
+			{
+				double defaultColor[3];
+				_defaultFaceProperty->GetColor(defaultColor);
+				_actor->GetProperty()->SetColor(defaultColor);
+			}
+		}
+		
+		
+		if (_actor->GetBackfaceProperty())
+		{
+			_actor->GetBackfaceProperty()->LightingOn();
+			if (_defaultbackFaceProperty)
+			{
+				double defaultbackColor[3];
+				_defaultbackFaceProperty->GetColor(defaultbackColor);
+				_actor->GetBackfaceProperty()->SetColor(defaultbackColor);
+			}
+		}
+		
 	}
 
 	if (iDisplayMode == FaceDisplay::NormalsByColor)

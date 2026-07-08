@@ -51,6 +51,10 @@ void AppControl::ReoriCamZ()
     _graphics->ReorientCameraZ();
 }
 
+void AppControl::ResetView() {
+    _graphics->ResetView();
+}
+
 void AppControl::ToggleEdgeDisplay(bool idisplay)
 {
     _graphics->DisplayEdges(idisplay);

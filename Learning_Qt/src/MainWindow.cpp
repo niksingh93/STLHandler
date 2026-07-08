@@ -104,6 +104,9 @@ void MainWindow::CreateActions()
     _reorientCameraZ = new QAction(QIcon("icons/Z_cam.png"), "Z-cam", this);  
     _reorientCameraZ->setShortcut(QKeySequence("Ctrl+3"));
 
+    _resetCameraAction = new QAction(QIcon("icons/Reset_view.png"), "Reset-View", this);
+    _resetCameraAction->setShortcut(QKeySequence("Ctrl+r"));
+
     // Topo Detection Options
     _detectNoiseShells = new QAction("Noise Shells", this);
 
@@ -131,6 +134,9 @@ void MainWindow::DefineActionBehaviour()
 
     connect(_reorientCameraZ, &QAction::triggered,
         this, &MainWindow::OnReoriCamZClicked);
+
+    connect(_resetCameraAction, &QAction::triggered,
+        this, &MainWindow::OnResetViewClicked);
 
     connect(_toggleEdgeDisplay, &QAction::toggled, 
         this, &MainWindow::OnEdgeDisplayToggled);
@@ -176,14 +182,17 @@ void MainWindow::CreateToolbar()
     QHBoxLayout* layout = new QHBoxLayout(cameraControl);
     layout->setContentsMargins(0, 0, 0, 0);
 
+    QToolButton* resetBtn = new QToolButton();
     QToolButton* xBtn = new QToolButton();
     QToolButton* yBtn = new QToolButton();
     QToolButton* zBtn = new QToolButton();
 
+    resetBtn->setDefaultAction(_resetCameraAction);
     xBtn->setDefaultAction(_reorientCameraX);
     yBtn->setDefaultAction(_reorientCameraY);
     zBtn->setDefaultAction(_reorientCameraZ);
 
+    layout->addWidget(resetBtn);
     layout->addWidget(xBtn);
     layout->addWidget(yBtn);
     layout->addWidget(zBtn);
@@ -351,6 +360,11 @@ void MainWindow::OnReoriCamYClicked()
 void MainWindow::OnReoriCamZClicked()
 {
     _AppControl->ReoriCamZ();
+}
+
+void MainWindow::OnResetViewClicked()
+{
+    _AppControl->ResetView();
 }
 
 void MainWindow::OnEdgeDisplayToggled(bool active)

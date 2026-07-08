@@ -28,6 +28,7 @@ public:
 	void ReorientCameraX();
 	void ReorientCameraY();
 	void ReorientCameraZ();
+	void ResetView();
 	
 
 private:

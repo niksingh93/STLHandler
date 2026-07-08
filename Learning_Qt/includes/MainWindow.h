@@ -23,6 +23,7 @@ public:
     void OnReoriCamXClicked();
     void OnReoriCamYClicked();
     void OnReoriCamZClicked();
+    void OnResetViewClicked();
 
     void OnEdgeDisplayToggled(bool active);
 
@@ -55,6 +56,7 @@ private:
     QAction* _reorientCameraX = NULL;
     QAction* _reorientCameraY = NULL;
     QAction* _reorientCameraZ = NULL;
+    QAction* _resetCameraAction = NULL;
 
     QAction* _detectNoiseShells = NULL;
 

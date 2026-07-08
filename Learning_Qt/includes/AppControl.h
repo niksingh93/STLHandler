@@ -25,6 +25,7 @@ public:
 	void ReoriCamX();
 	void ReoriCamY();
 	void ReoriCamZ();
+	void ResetView();
 	void ToggleEdgeDisplay(bool idisplay);
 	void ToggleNormalDisplay(bool idisplay);
 
