@@ -6,7 +6,7 @@
 #include <qlabel.h>
 #include <qwidget.h>
 #include <qdockwidget.h>
-//#include <QVTKOpenGLNativeWidget.h>
+#include <QVTKOpenGLNativeWidget.h>
 #include "AppControl.h"
 
 class MainWindow : public QMainWindow
@@ -27,6 +27,8 @@ public:
     void OnEdgeDisplayToggled(bool active);
 
     void OnNormalDisplayToggled(bool active);
+
+    void OnDetectNoiseShellsClicked();
 
 private:
     void CreateActions();
@@ -54,8 +56,11 @@ private:
     QAction* _reorientCameraY = NULL;
     QAction* _reorientCameraZ = NULL;
 
+    QAction* _detectNoiseShells = NULL;
+
 
     // Widgets
+    QVTKOpenGLNativeWidget* _vtkWidget = NULL;
     QWidget* _centerWidget = NULL;
     QWidget* _statsWidget = NULL;
     QDockWidget* _toolDock = NULL;

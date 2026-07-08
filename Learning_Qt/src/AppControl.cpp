@@ -17,6 +17,12 @@ void AppControl::LoadSTLFile(std::string ifilePath)
     //GenerateMeshFromStlData
     _mesh = MeshBuilder::GenerateMeshFromStlData(stlData, Min, Max);
 
+    // Forget existing mesh data
+    if (_topoDiagostics) delete _topoDiagostics;
+
+    //Generate Diagnostic tools
+    _topoDiagostics = new STLMeshDiagnosticTopo(_mesh);
+
     _graphics->DisplayMesh(_mesh);
 }
 
@@ -53,4 +59,26 @@ void AppControl::ToggleEdgeDisplay(bool idisplay)
 void AppControl::ToggleNormalDisplay(bool idisplay)
 {
     _graphics->DisplayNormalsByColor(idisplay);
+}
+
+void AppControl::DetectNoiseShells()
+{
+    if (_mesh == NULL) return;
+
+    std::vector<std::vector<int>> IndepedentFaceList;
+    _topoDiagostics->DetectNoiseShells(IndepedentFaceList);
+
+    int numOfShells = IndepedentFaceList.size();
+    if (numOfShells == 1) return;
+
+    // Shell with most number of triangles
+    int primaryShellID = 0;
+    for (int i = 0; i < IndepedentFaceList.size(); i++)
+    {
+        if (IndepedentFaceList[i].size() > IndepedentFaceList[primaryShellID].size())
+            primaryShellID = i;
+    }
+
+    _graphics->DisplayNoiseShells(IndepedentFaceList, primaryShellID, _mesh->GetNumFaces());
+
 }

@@ -7,7 +7,7 @@
 
 // Detects independent shells
 // Finds independent set of triangles which maintain edge connectivity
-void STLMeshDiagnosticTopo::DetectNoiseShells(std::vector<std::vector<int>> oIndepedentFaceList)
+void STLMeshDiagnosticTopo::DetectNoiseShells(std::vector<std::vector<int>>& oIndepedentFaceList)
 {
 	if (!_mesh || _mesh->GetNumFaces() == 0) return;
 
@@ -20,20 +20,24 @@ void STLMeshDiagnosticTopo::DetectNoiseShells(std::vector<std::vector<int>> oInd
 		if (IsProcessed[fid]) continue;
 
 		FaceQueue.push(fid); 
+		IsProcessed[fid] = true;
+
 		std::vector<int> faceList;
 		// While loop traverses through all edge connected triangles
 		while (!FaceQueue.empty())
 		{
+			// Process the faceID
 			int fid = FaceQueue.front();
-			std::vector<int> adjFaceList = _mesh->GetFace(fid).GetAdjacentFaceList();
-			IsProcessed[fid] = true;
 			faceList.push_back(fid);
+			std::vector<int> adjFaceList = _mesh->GetFace(fid).GetAdjacentFaceList();
 			FaceQueue.pop();
 
+			// Add adjacent faces to queue
 			for (auto f : adjFaceList)
 			{
 				if (IsProcessed[f]) continue;
 				FaceQueue.push(f);
+				IsProcessed[f] = true;
 			}
 		}
 

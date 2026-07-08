@@ -3,6 +3,7 @@
 #include <string>
 #include "STLMesh.h"
 #include "Grapics.h"
+#include "STLMeshDiagnosticTopo.h"
 
 class AppControl
 {
@@ -21,16 +22,19 @@ public:
 
 	double GetMeshNumVertices();
 
-
 	void ReoriCamX();
 	void ReoriCamY();
 	void ReoriCamZ();
 	void ToggleEdgeDisplay(bool idisplay);
 	void ToggleNormalDisplay(bool idisplay);
 
+	void DetectNoiseShells();
+
 private:
 	STLMesh* _mesh = NULL;
 	Grapics* _graphics = NULL;
+
+	STLMeshDiagnosticTopo* _topoDiagostics = NULL;
 };
 
 inline double AppControl::GetMeshVolume() { return _mesh->GetVolume(); }

@@ -22,8 +22,14 @@ Grapics::Grapics(vtkRenderWindow* irenderWindow)
 	_renderer->SetBackground2(1, 1, 1);
 
 	_actor = vtkSmartPointer<vtkActor>::New();
-	_actor->GetProperty()->LightingOff();
-	//_actor->GetProperty()->GetColor(_defaultColor);
+
+	// Copy of default properties [automatically deletes old defauls]
+	_defaultFaceProperty = vtkSmartPointer<vtkProperty>::New();
+	_defaultFaceProperty->DeepCopy(_actor->GetProperty());
+
+	_defaultbackFaceProperty = vtkSmartPointer<vtkProperty>::New();
+	_defaultbackFaceProperty->DeepCopy(_actor->GetBackfaceProperty());
+
 	_renderer->AddActor(_actor);
 	_renderer->ResetCamera();
 	
@@ -87,13 +93,13 @@ void Grapics::DisplayMesh(STLMesh* imesh)
 		normals->InsertNextTuple3(fnormal.x(), fnormal.y(), fnormal.z());
 	}
 
-	auto polyData = vtkSmartPointer<vtkPolyData>::New();
-	polyData->SetPoints(points);
-	polyData->SetPolys(triangles);
-	polyData->GetCellData()->SetNormals(normals);
+	_polyData = vtkSmartPointer<vtkPolyData>::New();
+	_polyData->SetPoints(points);
+	_polyData->SetPolys(triangles);
+	_polyData->GetCellData()->SetNormals(normals);
 
 
-	_mapper->SetInputData(polyData);
+	_mapper->SetInputData(_polyData);
 
 	_actor->SetMapper(_mapper);
 	_actor->GetProperty()->SetInterpolationToFlat();
@@ -101,8 +107,6 @@ void Grapics::DisplayMesh(STLMesh* imesh)
 	//_actor->GetProperty()->EdgeVisibilityOn();
 	_renderer->ResetCamera();
 	_renderer->GetRenderWindow()->Render();
-
-	
 }
 
 void Grapics::DisplayEdges(bool idisplay)
@@ -129,29 +133,61 @@ void Grapics::DisplayNormalsByColor(bool idisplay)
 		if (!_actor->GetBackfaceProperty())
 			_actor->SetBackfaceProperty(vtkSmartPointer<vtkProperty>::New());
 
-		// Copy of default properties [automatically deletes old defauls]
-		_defaultFaceProperty = vtkSmartPointer<vtkProperty>::New();
-		_defaultFaceProperty->DeepCopy(_actor->GetProperty());
-
-		_defaultbackFaceProperty = vtkSmartPointer<vtkProperty>::New();
-		_defaultbackFaceProperty->DeepCopy(_actor->GetBackfaceProperty());
+		SetFaceDisplayMode(FaceDisplay::NormalsByColor);
 
 		// Highlight front face in Green and back face in red
+		/*_actor->GetProperty()->LightingOff();
 		_actor->GetProperty()->SetColor(0.0, 1.0, 0.0);
-		_actor->GetBackfaceProperty()->SetColor(1.0, 0.0, 0.0);
+
+		_actor->GetBackfaceProperty()->LightingOff();
+		_actor->GetBackfaceProperty()->SetColor(1.0, 0.0, 0.0);*/
 	}
 	else
 	{
+
+		SetFaceDisplayMode(FaceDisplay::Default);
+
+		/*_actor->GetProperty()->LightingOn();
 		double defaultColor[3];
 		_defaultFaceProperty->GetColor(defaultColor);
 		_actor->GetProperty()->SetColor(defaultColor);
 
+		_actor->GetBackfaceProperty()->LightingOn();
 		double defaultbackColor[3];
 		_defaultbackFaceProperty->GetColor(defaultbackColor);
-		_actor->GetBackfaceProperty()->SetColor(defaultbackColor);
+		_actor->GetBackfaceProperty()->SetColor(defaultbackColor);*/
 	}
 
-	_renderer->GetRenderWindow()->Render();
+	//_renderer->GetRenderWindow()->Render();
+}
+
+void Grapics::DisplayNoiseShells(std::vector<std::vector<int>> noiseShells,
+									int iprimaryShellID,
+									int numOfCells)
+{
+	auto faceColors = vtkSmartPointer<vtkUnsignedCharArray>::New();
+
+	faceColors->SetName("FaceColors");
+	faceColors->SetNumberOfComponents(3);
+	faceColors->SetNumberOfTuples(numOfCells);
+
+	unsigned char red[3] = { 255, 0, 0 };
+	unsigned char green[3] = { 0, 255, 0 };
+
+	for (int n = 0; n < noiseShells.size(); n++)
+	{
+		auto color = red;
+		if (n == iprimaryShellID) color = green;
+
+		for (int fid : noiseShells[n])
+		{
+			faceColors->SetTypedTuple(fid, color);
+		}
+	}
+
+	_polyData->GetCellData()->SetScalars(faceColors);
+
+	SetFaceDisplayMode(FaceDisplay::NoiseShells);
 }
 
 void Grapics::ReorientCameraX()
@@ -193,5 +229,42 @@ void Grapics::ReorientCameraZ()
 	camera->SetViewUp(0, 1, 0);
 
 	_renderer->ResetCamera();
+	_renderer->GetRenderWindow()->Render();
+}
+
+void Grapics::SetFaceDisplayMode(FaceDisplay iDisplayMode)
+{
+	if (iDisplayMode == FaceDisplay::Default)
+	{
+		_mapper->ScalarVisibilityOff();
+
+		_actor->GetProperty()->LightingOn();
+		double defaultColor[3];
+		_defaultFaceProperty->GetColor(defaultColor);
+		_actor->GetProperty()->SetColor(defaultColor);
+
+		_actor->GetBackfaceProperty()->LightingOn();
+		double defaultbackColor[3];
+		_defaultbackFaceProperty->GetColor(defaultbackColor);
+		_actor->GetBackfaceProperty()->SetColor(defaultbackColor);
+	}
+
+	if (iDisplayMode == FaceDisplay::NormalsByColor)
+	{
+		// Highlight front face in Green and back face in red
+		_actor->GetProperty()->LightingOff();
+		_actor->GetProperty()->SetColor(0.0, 1.0, 0.0);
+
+		_actor->GetBackfaceProperty()->LightingOff();
+		_actor->GetBackfaceProperty()->SetColor(1.0, 0.0, 0.0);
+	}
+
+	if (iDisplayMode == FaceDisplay::NoiseShells)
+	{
+		_mapper->ScalarVisibilityOn();
+		_mapper->SetScalarModeToUseCellData();
+		_mapper->SetColorModeToDirectScalars();
+	}
+
 	_renderer->GetRenderWindow()->Render();
 }

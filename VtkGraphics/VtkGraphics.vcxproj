@@ -155,6 +155,10 @@
       <AdditionalLibraryDirectories>D:\vcpkg\installed\x64-windows\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>vtkGUISupportQt-9.3.lib;vtkRenderingOpenGL2-9.3.lib;vtkRenderingCore-9.3.lib;vtkInteractionStyle-9.3.lib;vtkCommonCore-9.3.lib;vtkCommonDataModel-9.3.lib;vtkRenderingAnnotation-9.3.lib;vtkInteractionWidgets-9.3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

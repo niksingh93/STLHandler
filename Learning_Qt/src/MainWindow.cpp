@@ -37,8 +37,9 @@ MainWindow::MainWindow()
     //setCentralWidget(_centerWidget);
 
     vtkNew<vtkGenericOpenGLRenderWindow> renderWindow;
-    QVTKOpenGLNativeWidget* vtkWidget = new QVTKOpenGLNativeWidget(this); 
-    vtkWidget->setRenderWindow(renderWindow);
+    _vtkWidget = new QVTKOpenGLNativeWidget(this); 
+    _vtkWidget->setRenderWindow(renderWindow);
+    
 
     // Object of Connenter class
     _AppControl = new AppControl();
@@ -62,7 +63,7 @@ MainWindow::MainWindow()
     //renderer->AddActor(actor);
     //renderer->ResetCamera();
 
-    setCentralWidget(vtkWidget);
+    setCentralWidget(_vtkWidget);
 
     // Creates all actions
     CreateActions();
@@ -83,7 +84,11 @@ void MainWindow::CreateActions()
 {
     // Actions List
     _openAction = new QAction(QIcon("icons/Open.png"), "Open", this);
+    _openAction->setShortcut(QKeySequence::Open);
+
     _saveAction = new QAction(QIcon("icons/Save.png"), "Save", this);
+    _saveAction->setShortcut(QKeySequence::Save);
+
     _toggleEdgeDisplay = new QAction(QIcon("icons/icons8-triangle.png"), "Display Edges", this);
     _toggleEdgeDisplay->setCheckable(true);
     _toggleNormalDisplay = new QAction(QIcon("icons/Color_triangle.png"), "Display Normal Dir", this);
@@ -91,8 +96,16 @@ void MainWindow::CreateActions()
 
     // Camera Actions
     _reorientCameraX = new QAction(QIcon("icons/X_cam.png"), "X-cam", this);  
+    _reorientCameraX->setShortcut(QKeySequence("Ctrl+1"));
+
     _reorientCameraY = new QAction(QIcon("icons/Y_cam.png"), "Y-cam", this);  
+    _reorientCameraY->setShortcut(QKeySequence("Ctrl+2"));
+
     _reorientCameraZ = new QAction(QIcon("icons/Z_cam.png"), "Z-cam", this);  
+    _reorientCameraZ->setShortcut(QKeySequence("Ctrl+3"));
+
+    // Topo Detection Options
+    _detectNoiseShells = new QAction("Noise Shells", this);
 
     /*
     QIcon icon("icons/Open.png");
@@ -124,6 +137,9 @@ void MainWindow::DefineActionBehaviour()
 
     connect(_toggleNormalDisplay, &QAction::toggled,
         this, &MainWindow::OnNormalDisplayToggled);
+
+    connect(_detectNoiseShells, &QAction::triggered,
+        this, &MainWindow::OnDetectNoiseShellsClicked);
 }
 
 #pragma endregion
@@ -189,6 +205,12 @@ void MainWindow::CreateMenus()
 
     if (!_statsWidget) CreateStatisticsWidget();
     //viewMenu->addAction(_statsWidget->toggleViewAction());
+
+    QMenu* DiagMenu = menuBar()->addMenu("Diagnostics");
+    QMenu* Geo = DiagMenu->addMenu("Geo");
+    QMenu* Topo = DiagMenu->addMenu("Topo");
+
+    Topo->addAction(_detectNoiseShells);
 }
 
 void MainWindow::CreateToolDockWidget()
@@ -339,6 +361,11 @@ void MainWindow::OnEdgeDisplayToggled(bool active)
 void MainWindow::OnNormalDisplayToggled(bool active)
 {
     _AppControl->ToggleNormalDisplay(active);
+}
+
+void MainWindow::OnDetectNoiseShellsClicked()
+{
+    _AppControl->DetectNoiseShells();
 }
 
 #pragma endregion

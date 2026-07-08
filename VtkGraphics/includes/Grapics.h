@@ -7,6 +7,14 @@
 #include "VtkGraphicsExports.h"
 #include "STLMesh.h"
 
+enum class FaceDisplay
+{
+	Default,
+	NoiseShells,
+	NormalsByColor,
+	OpenEdges
+};
+
 class VTKGRAPHICS_API Grapics
 {
 public:
@@ -15,6 +23,7 @@ public:
 	void DisplayMesh(STLMesh* imesh);
 	void DisplayEdges(bool idisplay);
 	void DisplayNormalsByColor(bool idisplay);
+	void DisplayNoiseShells(std::vector<std::vector<int>> noiseShellsint, int iprimaryShellID, int numOfCells);
 
 	void ReorientCameraX();
 	void ReorientCameraY();
@@ -22,6 +31,11 @@ public:
 	
 
 private:
+
+	void SetFaceDisplayMode(FaceDisplay iDisplayMode);
+
+	vtkSmartPointer<vtkPolyData> _polyData = NULL;
+
 	//vtkRenderWindow* _renderWindow = NULL;
 	vtkSmartPointer<vtkRenderer> _renderer = NULL;
 	vtkSmartPointer<vtkActor> _actor = NULL;
