@@ -45,6 +45,16 @@ MainWindow::MainWindow()
     _AppControl = new AppControl();
     _AppControl->InitializeGraphics(renderWindow);
 
+
+    _AppControl->WarningCallback =
+        [this](const std::string& msg)
+        {
+            QMessageBox::warning(
+                this,
+                "Warning",
+                QString::fromStdString(msg));
+        };
+
     //vtkNew<vtkRenderer> renderer;
     //renderWindow->AddRenderer(renderer);
     //renderer->GradientBackgroundOn(); // Enable gradient
@@ -109,6 +119,7 @@ void MainWindow::CreateActions()
 
     // Topo Detection Options
     _detectNoiseShells = new QAction("Noise Shells", this);
+    _detectInvertedNormals = new QAction("Inverted Normals", this);
 
     /*
     QIcon icon("icons/Open.png");
@@ -146,6 +157,9 @@ void MainWindow::DefineActionBehaviour()
 
     connect(_detectNoiseShells, &QAction::triggered,
         this, &MainWindow::OnDetectNoiseShellsClicked);
+
+    connect(_detectInvertedNormals, &QAction::triggered,
+        this, &MainWindow::OnDetectInvertedNormalsClicked);
 }
 
 #pragma endregion
@@ -220,6 +234,7 @@ void MainWindow::CreateMenus()
     QMenu* Topo = DiagMenu->addMenu("Topo");
 
     Topo->addAction(_detectNoiseShells);
+    Geo->addAction(_detectInvertedNormals);
 }
 
 void MainWindow::CreateToolDockWidget()
@@ -380,6 +395,11 @@ void MainWindow::OnNormalDisplayToggled(bool active)
 void MainWindow::OnDetectNoiseShellsClicked()
 {
     _AppControl->DetectNoiseShells();
+}
+
+void MainWindow::OnDetectInvertedNormalsClicked()
+{
+    _AppControl->DetectInvertedNormals();
 }
 
 #pragma endregion

@@ -14,6 +14,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow();
 
+private:
     void OnButtonClicked();
 
     void OnOpenClicked();
@@ -31,7 +32,9 @@ public:
 
     void OnDetectNoiseShellsClicked();
 
-private:
+    void OnDetectInvertedNormalsClicked();
+
+
     void CreateActions();
 
     void CreateToolbar();
@@ -59,6 +62,7 @@ private:
     QAction* _resetCameraAction = NULL;
 
     QAction* _detectNoiseShells = NULL;
+    QAction* _detectInvertedNormals = NULL;
 
 
     // Widgets

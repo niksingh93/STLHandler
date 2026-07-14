@@ -19,9 +19,11 @@ void AppControl::LoadSTLFile(std::string ifilePath)
 
     // Forget existing mesh data
     if (_topoDiagostics) delete _topoDiagostics;
+    if (_geoDiagnostics) delete _geoDiagnostics;
 
     //Generate Diagnostic tools
     _topoDiagostics = new STLMeshDiagnosticTopo(_mesh);
+    _geoDiagnostics = new STLMeshDiagnosticGeo(_mesh);
 
     _graphics->DisplayMesh(_mesh);
 }
@@ -67,13 +69,17 @@ void AppControl::ToggleNormalDisplay(bool idisplay)
 
 void AppControl::DetectNoiseShells()
 {
-    if (_mesh == NULL) return;
+    if (_mesh == NULL || _topoDiagostics == NULL) return;
 
     std::vector<std::vector<int>> IndepedentFaceList;
     _topoDiagostics->DetectNoiseShells(IndepedentFaceList);
 
     int numOfShells = IndepedentFaceList.size();
-    if (numOfShells == 1) return;
+    if (numOfShells == 1)
+    {
+        WarningCallback("No Noise Shells detected.");
+        return;
+    }
 
     // Shell with most number of triangles
     int primaryShellID = 0;
@@ -86,3 +92,17 @@ void AppControl::DetectNoiseShells()
     _graphics->DisplayNoiseShells(IndepedentFaceList, primaryShellID, _mesh->GetNumFaces());
 
 }
+
+void AppControl::DetectInvertedNormals()
+{
+    if (_mesh == NULL || _geoDiagnostics == NULL) return;
+
+    std::vector<int> FacesWithInvertedNormals;
+    FacesWithInvertedNormals = _geoDiagnostics->DetectInvertedNormals();
+
+    if (FacesWithInvertedNormals.size() == 0)
+        return;
+        
+}
+
+

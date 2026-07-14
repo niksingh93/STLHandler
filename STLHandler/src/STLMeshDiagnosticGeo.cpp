@@ -118,10 +118,15 @@ std::vector<int> STLMeshDiagnosticGeo::DetectInvertedNormals()
     std::vector<bool> IsOriDetermined(_mesh->GetNumFaces(), false);
     IsOriDetermined[RefFaceId] = true;
 
+    // FaceID of faces with inverted normals
+    std::vector<int> oFaceWithInvNormal;
+
+    if (IsCorrectlyOriented[RefFaceId] == false)
+        oFaceWithInvNormal.push_back(RefFaceId);
+
     std::queue<int> QueuedFaces;
     QueuedFaces.push(RefFaceId);
 
-    std::vector<int> oFaceWithInvNormal;
     while (!QueuedFaces.empty())
     {
         int priFaceID = QueuedFaces.front();

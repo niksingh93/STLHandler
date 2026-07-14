@@ -4,10 +4,12 @@
 #include "STLMesh.h"
 #include "Grapics.h"
 #include "STLMeshDiagnosticTopo.h"
+#include "STLMeshDiagnosticGeo.h"
 
 class AppControl
 {
 public:
+
 	void LoadSTLFile(std::string ifilePath);
 
 	void ExportSTLFile(std::string ifilePath);
@@ -30,12 +32,16 @@ public:
 	void ToggleNormalDisplay(bool idisplay);
 
 	void DetectNoiseShells();
+	void DetectInvertedNormals();
+
+	std::function<void(const std::string&)> WarningCallback;
 
 private:
 	STLMesh* _mesh = NULL;
 	Grapics* _graphics = NULL;
 
 	STLMeshDiagnosticTopo* _topoDiagostics = NULL;
+	STLMeshDiagnosticGeo* _geoDiagnostics = NULL;
 };
 
 inline double AppControl::GetMeshVolume() { return _mesh->GetVolume(); }

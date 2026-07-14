@@ -1,6 +1,6 @@
 #pragma once
 #include "STLMesh.h"
-class STLMeshDiagnosticGeo
+class STLHANDLER_API STLMeshDiagnosticGeo
 {
 public:
 	STLMeshDiagnosticGeo(STLMesh* mesh = NULL) : _mesh(mesh) {};
