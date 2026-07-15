@@ -34,7 +34,7 @@ public:
 	void DetectNoiseShells();
 	void DetectInvertedNormals();
 
-	std::function<void(const std::string&)> WarningCallback;
+	std::function<void(const std::string&)> RaiseWarning;
 
 private:
 	STLMesh* _mesh = NULL;

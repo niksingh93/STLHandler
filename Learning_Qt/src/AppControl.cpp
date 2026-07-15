@@ -77,7 +77,7 @@ void AppControl::DetectNoiseShells()
     int numOfShells = IndepedentFaceList.size();
     if (numOfShells == 1)
     {
-        WarningCallback("No Noise Shells detected.");
+        RaiseWarning("No Noise Shells detected.");
         return;
     }
 

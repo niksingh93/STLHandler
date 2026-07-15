@@ -45,15 +45,7 @@ MainWindow::MainWindow()
     _AppControl = new AppControl();
     _AppControl->InitializeGraphics(renderWindow);
 
-
-    _AppControl->WarningCallback =
-        [this](const std::string& msg)
-        {
-            QMessageBox::warning(
-                this,
-                "Warning",
-                QString::fromStdString(msg));
-        };
+    CreateFuntionCallbacks();
 
     //vtkNew<vtkRenderer> renderer;
     //renderWindow->AddRenderer(renderer);
@@ -424,3 +416,25 @@ void MainWindow::UpdateMeshStatistics()
         QString("Vertices: %1").arg(numVertices));
     
 }
+
+void MainWindow::CreateFuntionCallbacks()
+{
+    _AppControl->RaiseWarning =
+        [this](const std::string& msg)
+        {
+            QMessageBox msgBox;
+            //msgBox.setIcon(QMessageBox::Warning);
+            msgBox.setText(QString::fromStdString(msg));
+
+            QFont font = msgBox.font();
+            font.setPointSize(11); // Set your desired font size
+            msgBox.setFont(font);
+
+            msgBox.setWindowTitle("Warning");
+            msgBox.setWindowIcon(QIcon("icons/warning.png"));
+            //msgBox.setInformativeText(QString::fromStdString(msg));
+            msgBox.setStyleSheet("QLabel{min-width: 225px;}");
+            msgBox.exec();
+        };
+}
+

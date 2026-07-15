@@ -49,6 +49,8 @@ private:
 
     void UpdateMeshStatistics();
 
+    void CreateFuntionCallbacks();
+
     // Action List
     QAction* _openAction = NULL;
     QAction* _saveAction = NULL;
