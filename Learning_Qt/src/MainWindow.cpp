@@ -422,18 +422,60 @@ void MainWindow::CreateFuntionCallbacks()
     _AppControl->RaiseWarning =
         [this](const std::string& msg)
         {
-            QMessageBox msgBox;
-            //msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setText(QString::fromStdString(msg));
+            QMessageBox msgBox(QMessageBox::Warning, "Info",
+                QString::fromStdString(msg), QMessageBox::StandardButton::Ok);
 
             QFont font = msgBox.font();
-            font.setPointSize(11); // Set your desired font size
+            font.setPointSize(10);
             msgBox.setFont(font);
 
-            msgBox.setWindowTitle("Warning");
-            msgBox.setWindowIcon(QIcon("icons/warning.png"));
-            //msgBox.setInformativeText(QString::fromStdString(msg));
-            msgBox.setStyleSheet("QLabel{min-width: 225px;}");
+            auto layout = msgBox.findChild< QGridLayout*>();
+            if (layout)
+            {
+                layout->setSpacing(8);
+                layout->setContentsMargins(5, 5, 20, 5);
+            }
+
+            msgBox.exec();
+        };
+
+    _AppControl->RaiseInfo =
+        [this](const std::string& msg)
+        {
+            QMessageBox msgBox(QMessageBox::Information, "Info",
+                QString::fromStdString(msg), QMessageBox::StandardButton::Ok);
+
+            QFont font = msgBox.font();
+            font.setPointSize(10);
+            msgBox.setFont(font);
+
+            auto layout = msgBox.findChild< QGridLayout*>();
+            if (layout) 
+            {
+                layout->setSpacing(8);
+                layout->setContentsMargins(5, 5, 20, 5);
+            }
+
+            msgBox.exec();
+        };
+
+    _AppControl->RaiseError =
+        [this](const std::string& msg)
+        {
+            QMessageBox msgBox(QMessageBox::Critical, "Info",
+                QString::fromStdString(msg), QMessageBox::StandardButton::Ok);
+
+            QFont font = msgBox.font();
+            font.setPointSize(10);
+            msgBox.setFont(font);
+
+            auto layout = msgBox.findChild< QGridLayout*>();
+            if (layout)
+            {
+                layout->setSpacing(8);
+                layout->setContentsMargins(5, 5, 20, 5);
+            }
+
             msgBox.exec();
         };
 }

@@ -77,8 +77,13 @@ void AppControl::DetectNoiseShells()
     int numOfShells = IndepedentFaceList.size();
     if (numOfShells == 1)
     {
-        RaiseWarning("No Noise Shells detected.");
+        //RaiseWarning("No Noise Shells detected.");
+        RaiseInfo("No Noise Shells detected.");
         return;
+    }
+    else
+    {
+        RaiseWarning("numOfShells Nosie Shells detected.");
     }
 
     // Shell with most number of triangles

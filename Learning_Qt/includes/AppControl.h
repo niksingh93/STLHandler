@@ -35,6 +35,9 @@ public:
 	void DetectInvertedNormals();
 
 	std::function<void(const std::string&)> RaiseWarning;
+	std::function<void(const std::string&)> RaiseInfo;
+	std::function<void(const std::string&)> RaiseError;
+
 
 private:
 	STLMesh* _mesh = NULL;
