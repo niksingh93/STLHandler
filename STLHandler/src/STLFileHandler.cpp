@@ -4,7 +4,9 @@
 #include <assimp/postprocess.h>
 #include <iostream>
 #include <fstream>
+#include <string>
 #include "STLFileHandler.h"
+#include "Error.h"
 
 
 std::vector<Point> STLFileHandler::ReadFile(std::string iFile, Point * oMin, Point * oMax) {
@@ -45,7 +47,10 @@ std::vector<Point> STLFileHandler::ReadFile(std::string iFile, Point * oMin, Poi
 
 void STLFileHandler::WriteFile(std::string iFile, STLMesh* imesh)
 {
-    if (imesh == NULL) return;
+    if (imesh == NULL)
+    {
+        throw new Error(ErrorCode::NullPtr, "Mesh data not found");
+    }
 
     std::ofstream file(iFile);
 

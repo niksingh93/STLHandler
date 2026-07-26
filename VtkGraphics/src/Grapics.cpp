@@ -190,6 +190,32 @@ void Grapics::DisplayNoiseShells(std::vector<std::vector<int>> noiseShells,
 	SetFaceDisplayMode(FaceDisplay::NoiseShells);
 }
 
+void Grapics::DisplayInvertedNormals(std::vector<int> invertedNormalFid, int numOfCells)
+{
+	auto faceColors = vtkSmartPointer<vtkUnsignedCharArray>::New();
+
+	faceColors->SetName("FaceColors");
+	faceColors->SetNumberOfComponents(3);
+	faceColors->SetNumberOfTuples(numOfCells);
+
+	unsigned char red[3] = { 255, 0, 0 };
+	unsigned char green[3] = { 0, 255, 0 };
+
+	for (int fid = 0; fid < numOfCells; fid++)
+	{
+		faceColors->SetTypedTuple(fid, green);
+	}
+
+	for (int fid : invertedNormalFid)
+	{
+		faceColors->SetTypedTuple(fid, red);
+	}
+
+	_polyData->GetCellData()->SetScalars(faceColors);
+
+	SetFaceDisplayMode(FaceDisplay::NoiseShells);
+}
+
 void Grapics::ReorientCameraX()
 {
 	if (!_renderer) return;

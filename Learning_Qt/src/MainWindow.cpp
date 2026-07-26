@@ -314,13 +314,7 @@ void MainWindow::OnButtonClicked()
 
 void MainWindow::OnOpenClicked()
 {
-    QString filePath =
-        QFileDialog::getOpenFileName(
-            this,
-            "Open",
-            "",
-            "STL Files (*.stl)"
-        );
+    QString filePath = QFileDialog::getOpenFileName( this, "Open", "", "STL Files (*.stl)");
 
     // User pressed Cancel
     if (filePath.isEmpty())
@@ -422,7 +416,7 @@ void MainWindow::CreateFuntionCallbacks()
     _AppControl->RaiseWarning =
         [this](const std::string& msg)
         {
-            QMessageBox msgBox(QMessageBox::Warning, "Info",
+            QMessageBox msgBox(QMessageBox::Warning, "Warning",
                 QString::fromStdString(msg), QMessageBox::StandardButton::Ok);
 
             QFont font = msgBox.font();
@@ -442,7 +436,7 @@ void MainWindow::CreateFuntionCallbacks()
     _AppControl->RaiseInfo =
         [this](const std::string& msg)
         {
-            QMessageBox msgBox(QMessageBox::Information, "Info",
+            QMessageBox msgBox(QMessageBox::Information, "Information",
                 QString::fromStdString(msg), QMessageBox::StandardButton::Ok);
 
             QFont font = msgBox.font();
@@ -452,7 +446,7 @@ void MainWindow::CreateFuntionCallbacks()
             auto layout = msgBox.findChild< QGridLayout*>();
             if (layout) 
             {
-                layout->setSpacing(8);
+                layout->setSpacing(5);
                 layout->setContentsMargins(5, 5, 20, 5);
             }
 
@@ -462,7 +456,7 @@ void MainWindow::CreateFuntionCallbacks()
     _AppControl->RaiseError =
         [this](const std::string& msg)
         {
-            QMessageBox msgBox(QMessageBox::Critical, "Info",
+            QMessageBox msgBox(QMessageBox::Critical, "Error",
                 QString::fromStdString(msg), QMessageBox::StandardButton::Ok);
 
             QFont font = msgBox.font();

@@ -102,7 +102,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\vcpkg\installed\x64-windows\include;D:\vcpkg\installed\x64-windows\include\Qt6;D:\vcpkg\installed\x64-windows\include\Qt6\QtWidgets;D:\vcpkg\installed\x64-windows\include\Qt6\QtCore;D:\vcpkg\installed\x64-windows\include\Qt6\QtGui;D:\vcpkg\installed\x64-windows\include\vtk-9.3;D:\vcpkg\installed\x64-windows\include\Qt6\QtOpenGLWidgets;.\includes;$(SolutionDir)\STLHandler\includes;$(SolutionDir)\VtkGraphics\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\vcpkg\installed\x64-windows\include;D:\vcpkg\installed\x64-windows\include\Qt6;D:\vcpkg\installed\x64-windows\include\Qt6\QtWidgets;D:\vcpkg\installed\x64-windows\include\Qt6\QtCore;D:\vcpkg\installed\x64-windows\include\Qt6\QtGui;D:\vcpkg\installed\x64-windows\include\vtk-9.3;D:\vcpkg\installed\x64-windows\include\Qt6\QtOpenGLWidgets;.\includes;$(SolutionDir)\STLHandler\includes;$(SolutionDir)\VtkGraphics\includes;$(SolutionDir)\ErrorLib\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
@@ -206,7 +206,7 @@ xcopy "$(SolutionDir)$(SolutionName)\icons" "$(OutDir)icons\" /E /I /Y</Command>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\vcpkg\installed\x64-windows\include;D:\vcpkg\installed\x64-windows\include\Qt6;D:\vcpkg\installed\x64-windows\include\Qt6\QtWidgets;D:\vcpkg\installed\x64-windows\include\Qt6\QtCore;D:\vcpkg\installed\x64-windows\include\Qt6\QtGui;D:\vcpkg\installed\x64-windows\include\vtk-9.3;D:\vcpkg\installed\x64-windows\include\Qt6\QtOpenGLWidgets;.\includes;$(SolutionDir)\STLHandler\includes;$(SolutionDir)\VtkGraphics\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\vcpkg\installed\x64-windows\include;D:\vcpkg\installed\x64-windows\include\Qt6;D:\vcpkg\installed\x64-windows\include\Qt6\QtWidgets;D:\vcpkg\installed\x64-windows\include\Qt6\QtCore;D:\vcpkg\installed\x64-windows\include\Qt6\QtGui;D:\vcpkg\installed\x64-windows\include\vtk-9.3;D:\vcpkg\installed\x64-windows\include\Qt6\QtOpenGLWidgets;.\includes;$(SolutionDir)\STLHandler\includes;$(SolutionDir)\VtkGraphics\includes;$(SolutionDir)\ErrorLib\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -312,6 +312,9 @@ xcopy "$(SolutionDir)$(SolutionName)\icons" "$(OutDir)icons\" /E /I /Y</Command>
     <ClCompile Include="src\MainWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ErrorLib\ErrorLib.vcxproj">
+      <Project>{cb2ab134-9b35-4bdd-9845-d3090a080e54}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\STLHandler\STLHandler.vcxproj">
       <Project>{73c74a16-1dc6-4d55-a727-cf9544496aa8}</Project>
     </ProjectReference>

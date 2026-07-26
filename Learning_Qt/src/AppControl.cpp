@@ -1,6 +1,9 @@
 #include "AppControl.h"
 #include "STLFileHandler.h"
 #include "MeshBuilder.h"
+#include <string>
+#include <future>
+#include "Error.h"
 
 void AppControl::LoadSTLFile(std::string ifilePath)
 {
@@ -9,13 +12,19 @@ void AppControl::LoadSTLFile(std::string ifilePath)
     std::vector<Point> stlData;
     Point* Min = new Point();
     Point* Max = new Point();
-    stlData = STLFileHandler::ReadFile(ifilePath, Min, Max);
+
+    auto ReadFileThread = std::async(std::launch::async, STLFileHandler::ReadFile, ifilePath, Min, Max);
+    stlData = ReadFileThread.get();
+    //stlData = STLFileHandler::ReadFile(ifilePath, Min, Max);
+    
 
     // Forget existing mesh data
     if (_mesh) delete _mesh;
 
     //GenerateMeshFromStlData
-    _mesh = MeshBuilder::GenerateMeshFromStlData(stlData, Min, Max);
+    auto MeshGenerationThread = std::async(std::launch::async, MeshBuilder::GenerateMeshFromStlData, std::ref(stlData), Min, Max);
+    _mesh = MeshGenerationThread.get();
+    //_mesh = MeshBuilder::GenerateMeshFromStlData(stlData, Min, Max);
 
     // Forget existing mesh data
     if (_topoDiagostics) delete _topoDiagostics;
@@ -30,7 +39,16 @@ void AppControl::LoadSTLFile(std::string ifilePath)
 
 void AppControl::ExportSTLFile(std::string ifilePath)
 {
-    STLFileHandler::WriteFile(ifilePath, _mesh);
+    try 
+    {
+        STLFileHandler::WriteFile(ifilePath, _mesh);
+    }
+    catch (Error* err)
+    {
+        //std::cout << err->GetMsg() << std::endl;
+        RaiseError(err->GetMsg());
+    }
+    
 }
 
 void AppControl::InitializeGraphics(vtkRenderWindow* irenderWindow)
@@ -77,13 +95,8 @@ void AppControl::DetectNoiseShells()
     int numOfShells = IndepedentFaceList.size();
     if (numOfShells == 1)
     {
-        //RaiseWarning("No Noise Shells detected.");
         RaiseInfo("No Noise Shells detected.");
         return;
-    }
-    else
-    {
-        RaiseWarning("numOfShells Nosie Shells detected.");
     }
 
     // Shell with most number of triangles
@@ -96,6 +109,9 @@ void AppControl::DetectNoiseShells()
 
     _graphics->DisplayNoiseShells(IndepedentFaceList, primaryShellID, _mesh->GetNumFaces());
 
+    // Pop-Up for user
+    RaiseWarning(std::to_string(numOfShells - 1) + " Nosie Shells detected.");
+
 }
 
 void AppControl::DetectInvertedNormals()
@@ -106,8 +122,15 @@ void AppControl::DetectInvertedNormals()
     FacesWithInvertedNormals = _geoDiagnostics->DetectInvertedNormals();
 
     if (FacesWithInvertedNormals.size() == 0)
+    {
+        RaiseInfo("Normal Orientations are consistent.");
         return;
-        
+    }  
+
+    _graphics->DisplayInvertedNormals(FacesWithInvertedNormals, _mesh->GetNumFaces());
+
+    // Pop-Up for user
+    RaiseWarning(std::to_string(FacesWithInvertedNormals.size() - 1) + " Faces with inverted normals detected.");
 }
 
 

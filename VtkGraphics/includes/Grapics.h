@@ -24,6 +24,7 @@ public:
 	void DisplayEdges(bool idisplay);
 	void DisplayNormalsByColor(bool idisplay);
 	void DisplayNoiseShells(std::vector<std::vector<int>> noiseShellsint, int iprimaryShellID, int numOfCells);
+	void DisplayInvertedNormals(std::vector<int> invertedNormalFid, int numOfCells);
 
 	void ReorientCameraX();
 	void ReorientCameraY();
